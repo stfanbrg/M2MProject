@@ -1,0 +1,1 @@
+﻿ sudo /opt/logstash/bin/logstash agent -f /etc/logstash/conf.d/ /var/log/logstash/logstash.log --configtest
