@@ -1,4 +1,4 @@
-#entrée 1 chaine de 12 entier
+﻿#entrée 1 chaine de 12 entier
 #Xa Ya Za Xb Yb Zb Xc Yc Zc RSSIa RSSIb RSSIc id trame
 
 name=$(echo ${13}_$(date '+%d-%m-%Y').txt)
