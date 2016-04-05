@@ -2,44 +2,67 @@
 #include <stdlib.h>
 #include <math.h>
 
+#define R 6371000
+
+// import Lfrom dbrockman/degrees-radians.h
+// Converts degrees to radians.
+#define degreesToRadians(angleDegrees) (angleDegrees * M_PI / 180.0)
+
+// Converts radians to degrees.
+#define radiansToDegrees(angleRadians) (angleRadians * 180.0 / M_PI)
+
 struct point
 {
-	int x,y,z;
+	long double x,y;
 };
 
-double sq(double value)
+long double sq(long double value)
 {
 	return pow(2, value);
 }
 
-double distance(double power)
+long double distance(long double power)
 {
 	return power;
 	//return pow(10, (0-18-power)/(20));
 }
 
+struct point toCartesian(long double anglex, long double angley)
+{
+	struct point result;
+	result.x = R*sin(degreesToRadians(anglex));
+	result.y = R*sin(degreesToRadians(angley));
+	return result;
+}
+
+void toPolar(struct point *in)
+{
+	in->x = radiansToDegrees(asin(in->x/R));
+	in->y = radiansToDegrees(asin(in->y/R));
+}
+
 int main (int argc, char *argv[])
 {
-	struct point A, B, C;
-	A.x = strtod(argv[1], (char **)NULL); A.y = strtod(argv[2], (char **)NULL); A.z = strtod(argv[3], (char **)NULL);
-	B.x = strtod(argv[4], (char **)NULL); B.y = strtod(argv[5], (char **)NULL); B.z = strtod(argv[6], (char **)NULL);
-	C.x = strtod(argv[7], (char **)NULL); C.y = strtod(argv[8], (char **)NULL); C.z = strtod(argv[9], (char **)NULL);
-	double valA = distance(strtod(argv[10], (char **)NULL));
-	double valB = distance(strtod(argv[11], (char **)NULL));
-	double valC = distance(strtod(argv[12], (char **)NULL));
+	struct point A, B, C, result;
+	A = toCartesian(strtod(argv[1], (char **)NULL), strtod(argv[2], (char **)NULL));
+	B = toCartesian(strtod(argv[3], (char **)NULL), strtod(argv[4], (char **)NULL));
+	C = toCartesian(strtod(argv[5], (char **)NULL), strtod(argv[6], (char **)NULL));
+	long double valA = strtod(argv[7], (char **)NULL);
+	long double valB = strtod(argv[8], (char **)NULL);
+	long double valC = strtod(argv[9], (char **)NULL);
 
 	if (B.x == A.x)
 	{
 		if(C.x != A.x && B.y != A.y)
 		{
 			struct point exchange = B;
-			double valexchange = valB;
+			long double valexchange = valB;
 			B = C; valB = valC;
 			C = exchange; valC = valexchange;
 		}
 		else
 		{
-			printf("allez vous faire tondre la pelouse par un tranosaure!!!\n");
+			printf("allez vous Lfaire tondre la pelouse par un tiranosaure!!!\n");
 			return 1;
 		}
 	}
@@ -49,7 +72,7 @@ int main (int argc, char *argv[])
 		if (B.y != A.y && C.x != A.x)
 		{
 			struct point exchange = B;
-			double valexchange = valB;
+			long double valexchange = valB;
 			B = C; valB = valC;
 			C = exchange; valC = valexchange;
 		}
@@ -60,12 +83,8 @@ int main (int argc, char *argv[])
 		}
 	}
 
-	double x, y, z;
-	x = (sq(valA) - sq(valB) + sq(abs(B.x-A.x)))/(2*abs(B.x-A.x));
-	y = (sq(valA) - sq(valC) + sq(abs(C.x-A.x)) + sq(abs(C.y-A.y)))/(2*abs(C.y-A.y)) - (abs(C.x-A.x)/abs(C.y-A.y))*x;
-	z = sqrt(abs(sq(valA) - sq(x) - sq(y)));
-
-	printf("%f %f %f\n", x, y, z);
-
+	result.x = (valA*A.x + valB*B.x + valC*C.x)/(valA + valB + valC);
+	result.y = (valA*A.y + valB*B.y + valC*C.y)/(valA + valB + valC);
+	toPolar(&result);
 	return 0;
 }
