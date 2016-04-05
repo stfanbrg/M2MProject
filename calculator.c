@@ -83,8 +83,20 @@ int main (int argc, char *argv[])
 		}
 	}
 
+	//methode bien
+	
+	// result.x = ((sq(valA) - sq(valB) + sq(B.x) - sq(A.x) + sq(B.y) - sq(A.y)) * 2 * abs(C.y - B.y)
+	// 			- (sq(valB) - sq(valC) + sq(C.x) - sq(B.x) + sq(C.y) - sq(B.y))* 2 * abs(B.y - A.y))
+	// 			/ (4 * (abs(B.x - C.x)*abs(B.y - A.y) - abs(A.x - B.x)*abs(C.y - B.y)));
+	// result.y = (sq(valA) - sq(valB) + sq(B.x) - sq(A.x) + sq(B.y) - sq(A.y) + 2 * result.x * abs(A.x - B.x))
+	// 			/(2 * abs(B.y - A.y));
+	
+
+	//methode dégueux
 	result.x = (valA*A.x + valB*B.x + valC*C.x)/(valA + valB + valC);
 	result.y = (valA*A.y + valB*B.y + valC*C.y)/(valA + valB + valC);
+
 	toPolar(&result);
+	printf("%Lf %Lf\n", result.x, result.y);
 	return 0;
 }
